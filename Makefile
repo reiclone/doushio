@@ -1,6 +1,7 @@
 all: bootstrap client
 	$(MAKE) -C imager
 	$(MAKE) -C server/tripcode
+	$(MAKE) -C server/wordsearch
 	$(MAKE) -C admin/mnemonic
 
 client: FORCE
@@ -20,6 +21,7 @@ upgrade: clean
 clean:
 	$(MAKE) -C imager -w clean
 	$(MAKE) -C server/tripcode -w clean
+	$(MAKE) -C server/wordsearch -w clean
 	$(MAKE) -C admin/mnemonic -w clean
 
 client_clean:

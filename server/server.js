@@ -25,7 +25,8 @@ let _ = require('underscore'),
     Render = require('./render'),
     tripcode = require('./tripcode/tripcode'),
     urlParse = require('url').parse,
-    winston = require('winston');
+    winston = require('winston'),
+    searchHandler = require('./wordsearch/searchhandler');
 
 require('../admin');
 require('../imager/daemon'); // preload and confirm it works
@@ -433,6 +434,10 @@ dispatcher[common.FINISH_POST] = function (msg, client) {
 		if (err)
 			client.kotowaru(Muggle("Couldn't finish post.", err));
 	});
+	//Thread number is in op for normal posts and num for OP posts wich don't have op.
+	searchHandler.addText(client.post.body,
+		searchHandler.getThreadIndex((client.post.op)? client.post.op :client.post.num,client.board),
+		client.board);
 	return true;
 };
 
@@ -457,7 +462,11 @@ dispatcher[common.INSERT_IMAGE] = function (msg, client) {
 	return true;
 };
 
-
+dispatcher[common.SEARCH_QUERY] = function(msg,client){
+	client.send([0,common.SEARCH_QUERY,searchHandler.search(msg,client.board)]);
+	return true;
+};
+			
 // Online count
 hooks.hook('clientSynced', function(info, cb){
 	info.client.send([

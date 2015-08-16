@@ -20,6 +20,8 @@ var lang = {
 	top: 'Topo',
 	reply: 'Postar',
 	newThread: 'Novo tópico',
+	search: 'Search...',
+	noresults: 'No results found.',
 	locked_to_bottom: 'Travado ao rodapé',
 	you: '(You)',
 	done: 'Feito',

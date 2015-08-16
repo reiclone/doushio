@@ -20,6 +20,8 @@ var lang = {
 	top: 'Arriba',
 	reply: 'Reply',
 	newThread: 'New thread',
+	search: 'Buscar...',
+	noresults: 'No se encontraron resultados.',
 	locked_to_bottom: 'Locked to bottom',
 	you: '(You)',
 	done: 'Hecho',

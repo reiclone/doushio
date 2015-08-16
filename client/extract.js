@@ -3,7 +3,7 @@
  */
 
 let main = require('./main'),
-	{_, options, state, posts} = main;
+	{_, options, state, posts,search} = main;
 
 class Extract {
 	constructor() {
@@ -14,8 +14,10 @@ class Extract {
 		main.request('notify:title', json.title);
 
 		// We don't need models on catalog pages
-		if (state.page.get('catalog'))
+		if (state.page.get('catalog')) {
+			search.load();
 			return;
+		}
 
 		const mine = this.mine = state.mine.readAll(),
 			posts = this.posts = json.posts;

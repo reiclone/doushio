@@ -135,7 +135,8 @@ _.extend(main, {
 	notify: require('./notify'),
 	banner: require('./banner'),
 	report: require('./report'),
-	amusement: require('./amusement')
+	amusement: require('./amusement'),
+	search: require('./search')
 });
 
 // Load post models and views

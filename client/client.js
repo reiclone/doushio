@@ -3,7 +3,7 @@
  */
 
 let main = require('./main'),
-	{$, _, common, dispatcher, posts, state} = main;
+	{$, _, common, dispatcher, posts, search, state} = main;
 
 dispatcher[common.INSERT_POST] = function(msg) {
 	let bump = msg[1] && state.page.get('live');
@@ -166,6 +166,9 @@ _.extend(dispatcher, {
 			state.configHash = msg[1];
 			state.hotConfig.set(msg[2]);
 		}
+	},
+	[common.SEARCH_QUERY](msg){
+		search.HighlightResults(msg);
 	}
 });
 

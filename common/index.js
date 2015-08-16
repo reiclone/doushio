@@ -30,6 +30,7 @@ const DEF = {
 	NOTIFICATION: 39,
 	RADIO: 40,
 	RESYNC: 41,
+	SEARCH_QUERY: 42,
 
 	// Moderation
 	MODEL_SET: 50,
