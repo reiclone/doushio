@@ -67,7 +67,12 @@ NAN_METHOD(WordStructure::New){
 
 NAN_METHOD(WordStructure::AddWord){
     WordStructure* obj = ObjectWrap::Unwrap<WordStructure>(info.Holder());
-    
+  
+    if(!info[0]->IsString() || !info[1]->IsNumber() || !info[2]->IsNumber()){
+        std::cerr<<"WordStructure: Wrong argument passed to Addword(String,int,int)"<<std::endl;
+	info.GetReturnValue().SetNull();
+	return;
+    }
     String::Utf8Value wordUcs2(info[0]);
     std::string word=std::string(*wordUcs2);
     uint8_t thread = info[1]->Uint32Value();
@@ -78,6 +83,11 @@ NAN_METHOD(WordStructure::AddWord){
 
 NAN_METHOD(WordStructure::DeleteWordsFromThread){
     WordStructure* obj = ObjectWrap::Unwrap<WordStructure>(info.Holder());
+    if(!info[0]->IsNumber()){
+        std::cerr<<"WordStructure: Wrong argument passed to DeleteWordsFromThread(int)"<<std::endl;
+	info.GetReturnValue().SetNull();
+	return;
+    }
     unsigned int thread = info[0]->Uint32Value();
 
     if(thread<obj->ThreadList.size()){
@@ -90,7 +100,11 @@ NAN_METHOD(WordStructure::DeleteWordsFromThread){
 
 NAN_METHOD(WordStructure::Search){
     WordStructure* obj = ObjectWrap::Unwrap<WordStructure>(info.Holder());
-    
+    if(!info[0]->IsString()){
+        std::cerr<<"WordStructure: Wrong argument passed to Search(String)"<<std::endl;
+	info.GetReturnValue().SetNull();
+	return;
+    }
     String::Utf8Value wordUcs2(info[0]);
     std::string word=std::string(*wordUcs2);
     std::stringstream output;
@@ -103,7 +117,11 @@ NAN_METHOD(WordStructure::Search){
 }
 NAN_METHOD(WordStructure::GetThreadIndex){
     WordStructure* obj = ObjectWrap::Unwrap<WordStructure>(info.Holder());
-
+    if(!info[0]->IsString()){
+        std::cerr<<"WordStructure: Wrong argument passed to GetThreadIndex(String)"<<std::endl;
+	info.GetReturnValue().SetNull();
+	return;
+    }
     String::Utf8Value threadUcs2(info[0]);
     std::string thread=std::string(*threadUcs2);
 

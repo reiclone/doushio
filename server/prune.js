@@ -7,7 +7,8 @@ let _ = require('underscore'),
 	config = require('../config'),
     db = require('../db'),
 	state = require('./state'),
-    winston = require('winston');
+    winston = require('winston'),
+	searchHandler = require('./wordsearch/searchhandler');
 
 const yaku = new db.Yakusoku(null, db.UPKEEP_IDENT),
 	redis = global.redis;
@@ -45,8 +46,10 @@ function yandere() {
 			yaku.purge_thread(thread, board, function (err) {
 				if (err)
 					winston.error('Thread purging error:', err);
-				else
+				else {
+					searchHandler.deleteThread(searchHandler.getThreadIndex(thread,board),board);
 					winston.info('Purged thread: ' + thread);
+				}
 			});
 		});
 	})

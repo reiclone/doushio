@@ -30,6 +30,7 @@ let _ = require('underscore'),
 
 require('../admin');
 require('../imager/daemon'); // preload and confirm it works
+searchHandler.load();
 var radio;
 if (config.RADIO)
 	radio = require('./radio');
@@ -436,7 +437,7 @@ dispatcher[common.FINISH_POST] = function (msg, client) {
 	});
 	//Thread number is in op for normal posts and num for OP posts wich don't have op.
 	searchHandler.addText(client.post.body,
-		searchHandler.getThreadIndex((client.post.op)? client.post.op :client.post.num,client.board),
+		searchHandler.getThreadIndex((client.post.op)? client.post.op.toString() :client.post.num.toString(),client.board),
 		client.board);
 	return true;
 };
@@ -463,7 +464,7 @@ dispatcher[common.INSERT_IMAGE] = function (msg, client) {
 };
 
 dispatcher[common.SEARCH_QUERY] = function(msg,client){
-	client.send([0,common.SEARCH_QUERY,searchHandler.search(msg,client.board)]);
+	client.send([0,common.SEARCH_QUERY,searchHandler.search(msg.toString(),client.board)]);
 	return true;
 };
 			

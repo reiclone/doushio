@@ -15,7 +15,7 @@ const punctUnicode = /[\u2000-\u206F\u2E00-\u2E7F\\'!"$%&()*+,\-.\/:;<=>?@\[\]^_
 function load(){
     async.each(config.BOARDS,loadBoard);
 }
-load();
+exports.load = load;
 function loadBoard(currboard,cb) {
     wordStructures[currboard] = wordSearchMod.WordStructure();
     let threadI =[],
@@ -82,6 +82,8 @@ function search(word,board){
 exports.search = search;
 
 function addText(text,threadid,board){
+    if(!text)
+        return;
     let cword;
     for(let word of text.split(/[\s,]+/)){
         cword=word.toLowerCase().replace(punctUnicode,"");
