@@ -14,7 +14,8 @@ const _ = require('underscore'),
     hot = require('./server/state').hot,
     Muggle = require('./util/etc').Muggle,
     tail = require('./util/tail'),
-    winston = require('winston');
+    winston = require('winston'),
+	searchHandler = require('./server/wordsearch/searchhandler');
 
 let OPs = exports.OPs = cache.OPs,
 	TAGS = exports.TAGS = cache.opTags,
@@ -201,6 +202,8 @@ function set_OP_tag(tagIndex, op) {
 }
 
 function removeOPTag(op) {
+	const opBoard = config.BOARDS[TAGS[op]];
+	searchHandler.deleteThread(searchHandler.getThreadIndex(op,opBoard),opBoard);
 	delete OPs[op];
 	delete TAGS[op];
 }
@@ -753,6 +756,13 @@ class Yakusoku extends events.EventEmitter {
 		/* Don't need to check .exists() thanks to client state */
 		this.finish_off(m, key, post.body);
 		this._log(m, post.op || post.num, common.FINISH_POST, [post.num]);
+		//update search structure.
+		//Thread number is in op for normal posts and num for OP posts wich don't have op.
+		const threadnum =(post.op)? post.op :post.num;
+		const postBoard=config.BOARDS[TAGS[threadnum]];
+		searchHandler.addText(post.body.toString(),
+			searchHandler.getThreadIndex(threadnum.toString(),postBoard),
+			postBoard);
 		m.exec(callback);
 	}
 	finish_off(m, key, body) {

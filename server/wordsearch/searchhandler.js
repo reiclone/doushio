@@ -9,8 +9,9 @@ let wordSearchMod = require("./wordsearch"),
     redis = require('redis').createClient();
 
 let wordStructures = {};
-//regex for all punctuation including unicode. !Excluding #!
-const punctUnicode = /[\u2000-\u206F\u2E00-\u2E7F\\'!"$%&()*+,\-.\/:;<=>?@\[\]^_`{|}~0-9\n]/g;
+
+//regex for all punctuation including unicode. !Excluding # and ~!
+const punctUnicode = /[\u2000-\u206F\u2E00-\u2E7F\\'!"$%&()*+,\-.\/:;<=>?@\[\]^_`{|}\n]/g;
 
 function load(){
     async.each(config.BOARDS,loadBoard);
@@ -87,13 +88,12 @@ function addText(text,threadid,board){
     let cword;
     for(let word of text.split(/[\s,]+/)){
         cword=word.toLowerCase().replace(punctUnicode,"");
-        if(cword.length>1)
+        if(cword.length>0)
            wordStructures[board].AddWord(cword,threadid,1);
     }
 }
 exports.addText =addText;
 
-/*Actually not called, because threads don't get pruned somehow*/
 function deleteThread(threadid,board){
     wordStructures[board].DeleteWordsFromThread(threadid);
 }

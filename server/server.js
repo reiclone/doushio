@@ -435,10 +435,6 @@ dispatcher[common.FINISH_POST] = function (msg, client) {
 		if (err)
 			client.kotowaru(Muggle("Couldn't finish post.", err));
 	});
-	//Thread number is in op for normal posts and num for OP posts wich don't have op.
-	searchHandler.addText(client.post.body,
-		searchHandler.getThreadIndex((client.post.op)? client.post.op.toString() :client.post.num.toString(),client.board),
-		client.board);
 	return true;
 };
 
