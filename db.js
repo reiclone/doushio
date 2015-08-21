@@ -205,7 +205,7 @@ function set_OP_tag(tagIndex, op) {
 
 function removeOPTag(op) {
 	const opBoard = config.BOARDS[TAGS[op]];
-	searchHandler.deleteThread(searchHandler.getThreadIndex(op,opBoard),opBoard);
+	searchHandler.deleteThread(op,opBoard);
 	delete OPs[op];
 	delete TAGS[op];
 }
@@ -263,7 +263,6 @@ function update_cache(chan, msg) {
 	var op = msg.op,
 		kind = msg.kind,
 		tag = config.BOARDS.indexOf(msg.tag);
-
 	if (kind == common.INSERT_POST) {
 		if (msg.num)
 			OPs[msg.num] = op;
@@ -1048,8 +1047,8 @@ class Yakusoku extends events.EventEmitter {
 					const key = keys[i],
 						num = nums[i],
 						msg = [num];
-					persist(m, key, msg);
-					
+					persist(m, key, msg, res[i]);
+
 					// Live publish
 					this.logModeration(m, {key, op, kind, num, msg});
 				}
@@ -1106,11 +1105,13 @@ Yakusoku.prototype.moderationSpecs = {
 		}
 	},
 	[common.DELETE_POSTS]: {
-		props: ['deleted'],
+		props: ['deleted','body'],
 		check(res) {
 			return !!res[0];
 		},
-		persist(m, key) {
+		persist(m, key, msg, res) {
+			const op=OPs[msg];
+			searchHandler.moveToDel(res[1],op.toString(),config.BOARDS[TAGS[op]],toString());
 			m.hset(key, 'deleted', 1);
 		}
 	},

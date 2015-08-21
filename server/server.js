@@ -460,7 +460,10 @@ dispatcher[common.INSERT_IMAGE] = function (msg, client) {
 };
 
 dispatcher[common.SEARCH_QUERY] = function(msg,client){
-	client.send([0,common.SEARCH_QUERY,searchHandler.search(msg.toString(),client.board)]);
+	client.send([0,common.SEARCH_QUERY,searchHandler.search(
+		msg.toString(),
+		client.board,
+		(client.ident.auth && common.checkAuth('janitor',client.ident)))]);
 	return true;
 };
 			

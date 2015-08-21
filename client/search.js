@@ -50,8 +50,11 @@ function HighlightResults(results) {
             const title = ($title)? $title.text().toLowerCase():null;
             let n =0;
             n+=parseInt(threads[hist.attr('href')] || 0);
-            if(title && title.indexOf(word)>-1)
-                n++;
+            if(title)
+                common.splitToWords(title,function(tword){
+                    if(word===tword)
+                        n++;
+                });
             if (n>0) {
                 found=true;
                 hist.before('<span class="search_inf">' + n + '</span>');

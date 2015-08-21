@@ -107,10 +107,13 @@ NAN_METHOD(WordStructure::Search){
     }
     String::Utf8Value wordUcs2(info[0]);
     std::string word=std::string(*wordUcs2);
+    if(obj->Rbtree.find(word) ==obj->Rbtree.end()){ //check if the word is in the map
+	    info.GetReturnValue().SetEmptyString();
+	    return;
+    }
     std::stringstream output;
     std::map<uint8_t,unsigned int> r = obj->Rbtree[word];
     std::vector<std::string> t = obj->ThreadList;
-    //check null
     for(std::map<uint8_t,unsigned int>::iterator it = r.begin(); it != r.end(); ++it)
         output<< t[(it->first)]<<":"<<(it->second)<<"|";
     info.GetReturnValue().Set(Nan::New<String>(output.str()).ToLocalChecked());

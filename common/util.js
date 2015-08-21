@@ -463,3 +463,18 @@ function checkAuth(type, ident) {
 	return levels.indexOf(type) <= levels.indexOf(ident.auth);
 }
 exports.checkAuth = checkAuth;
+
+//regex for all punctuation including unicode. !Excluding # and ~!
+const punctUnicode = /[\u2000-\u206F\u2E00-\u2E7F\\'!"$%&()*+,\-.\/:;<=>?@\[\]^_`{|}「」\n]/g;
+//Splits a text to words and calls func(word) on each one of them.
+function splitToWords(text,func){
+	if(!text)
+		return;
+	let cword;
+	for(let word of text.split(/[\s,]+/)){
+		cword=word.toLowerCase().replace(punctUnicode,"");
+		if(cword.length>0)
+			func(cword);
+	}
+}
+exports.splitToWords = splitToWords;
