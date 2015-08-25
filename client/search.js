@@ -5,31 +5,6 @@
 let main = require('./main'),
     {$, _, Backbone, common, lang, state} = main;
 
-function load() {
-    const $el = $('#searchBox');
-    const $text = $el.find('#searchText');
-
-    //Some hacky css formatting
-    $('aside.act:nth-child(4)').css("display","inline-block"); //change css on the "New Thread" button.
-    function sendSearchQuery(){
-        let text =$text[0].value;
-        if(text.length>0)
-            main.request('send', [common.SEARCH_QUERY,text.toLowerCase()]);
-        else{
-            if (state.page.get('catalog')){ //No search, return default state
-                $('.search_inf').remove();
-                $('article').show();
-            }
-        }
-    }
-    $el.find('#searchBut').click(()=> sendSearchQuery());
-    $text.keypress(function(e){
-        if(e.which==13)
-            sendSearchQuery();
-    });
-}
-exports.load = load;
-
 //The results are in a string with the folowing format
 //Thread1:nTimesWordInThread1|Thread2:nTimesWordInThread2|...|ThreadX:nTimesWordInThreadX|
 //Or an empty string if no results are found
@@ -69,3 +44,16 @@ function HighlightResults(results) {
     }
 }
 exports.HighlightResults = HighlightResults;
+
+main.$threads.on('submit','#searchBox',function(e){
+    let text =$('#searchText')[0].value;
+    if(text.length>0)
+        main.request('send', [common.SEARCH_QUERY,text.toLowerCase()]);
+    else{
+        if (state.page.get('catalog')){ //No search, return default state
+            $('.search_inf').remove();
+            $('article').show();
+        }
+    }
+    e.preventDefault();
+});

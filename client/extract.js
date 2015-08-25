@@ -14,10 +14,8 @@ class Extract {
 		main.request('notify:title', json.title);
 
 		// We don't need models on catalog pages
-		if (state.page.get('catalog')) {
-			search.load();
+		if (state.page.get('catalog'))
 			return;
-		}
 
 		const mine = this.mine = state.mine.readAll(),
 			posts = this.posts = json.posts;

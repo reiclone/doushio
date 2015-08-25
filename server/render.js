@@ -110,10 +110,8 @@ class Render {
 		// Only render on 'live' board pages
 		if (opts.live && !config.READ_ONLY)
 			resp.write(this.oneeSama.newThreadBox());
-		if (opts.catalog){
-			resp.write(this.searchBox());
+		if (opts.catalog)
 			resp.write('<div id="catalog">');
-		}
 	}
 	templateTop() {
 		// Templates are generated one per language and cached
@@ -237,14 +235,15 @@ class Render {
 	}
 	searchBox() {
 		const lang = this.oneeSama.lang;
-		return '<aside id="searchBox">' +
+		return '<form id="searchBox">' +
 				'<input type="text" id="searchText" placeholder="'+lang.search+'">' +
 				'<input type="submit" id="searchBut" value="">' +
-				'</aside><div style="clear:both"></div>';
+				'</form><div style="clear:both"></div>';
 	}
 	catalogTop() {
 		const pag = this.oneeSama.asideLink('return', '.', 'compact', 'history');
 		this.resp.write(pag);
+		this.resp.write(this.searchBox());
 		// Assign to this.pag, to make duplicating at bottom more uniform
 		this.pag = pag;
 	}
